@@ -2,7 +2,14 @@
 
 ![](images/cover.png)
 
-This presentation is based on Observable.js, Echarts.js, D3.js and shiny, before starting to run it, we need to make some preparations.
+The related work as below.
+
+> - `patterncausality` package in [CRAN](https://CRAN.R-project.org/package=patterncausality).  
+- `patterncausality` official [Github](https://github.com/skstavroglou/pattern_causality) page.  
+- `patterncausality` package [user guide](https://www.stavroglou.com/pattern_causality/articles/patterncausality.html).  
+- `patterncausality` paper in [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4966221)  
+
+This presentation is based on Observable.js, Echarts.js, D3.js, Mermaid, tikz, pseudocode and shiny, before starting to run it, we need to make some preparations.
 
 - Download the [Quarto](https://quarto.org/).
 - Download the [R](https://www.r-project.org/)
@@ -73,3 +80,16 @@ quarto serve presentation.qmd
 
 Relevant information will be presented below.
 
+## References
+
+- Stavroglou, S. K., Pantelous, A. A., Stanley, H. E., & Zuev, K. M.
+  (2019). Hidden interactions in financial markets. *Proceedings of the
+  National Academy of Sciences, 116(22)*, 10646-10651.
+
+- Stavroglou, S. K., Pantelous, A. A., Stanley, H. E., & Zuev, K. M.
+  (2020). Unveiling causal interactions in complex systems. *Proceedings
+  of the National Academy of Sciences, 117(14)*, 7599-7605.
+
+- Stavroglou, S. K., Ayyub, B. M., Kallinterakis, V., Pantelous, A. A.,
+  & Stanley, H. E. (2021). A novel causal risk‐based decision‐making
+  methodology: The case of coronavirus. *Risk Analysis, 41(5)*, 814-830.
