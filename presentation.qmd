@@ -1,0 +1,2254 @@
+---
+filters:
+  - pseudocode
+author:
+  - name: Hui Wang
+    url: http://huiw.org
+  - name: Stavros Stavroglou*
+    corresponding: true
+    url: http://www.stavroglou.com/
+  - name: Athanasios Pantelous
+    url: http://research.monash.edu/en/persons/athanasios-pantelous
+
+format:
+  revealjs: 
+    logo: images/Monash.svg
+    preview-links: auto
+    theme: mytheme.scss
+    menu: false
+    transition: slide
+    background-transition: fade
+    auto-play-media: true
+    include-in-header:
+      text: |
+        <script>
+        MathJax = {
+          loader: {
+            load: ['[tex]/boldsymbol']
+          },
+          tex: {
+            tags: "all",
+            inlineMath: [['$','$'], ['\\(','\\)']],
+            displayMath: [['$$','$$'], ['\\[','\\]']],
+            processEscapes: true,
+            processEnvironments: true,
+            packages: {
+              '[+]': ['boldsymbol']
+            }
+          }
+        };
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+server: shiny
+---
+
+## {.title background=white}
+
+<video data-autoplay loop style="position: absolute; bottom: 50px; right: 10px; height: 50%;border: none;">
+    <source src="images/finance attractor.mp4">
+</video>
+
+
+<!-- ![](images/logo.png){.absolute bottom=100 right=100 height="35%"} -->
+
+<h1>**Pattern Causality** <br> in [*`R`*](https://www.r-project.org/)</h1>
+<hr>
+<p style="font-size: 0.9em; margin-top: 1.5em;">
+    <a href="https://huiw.org">**Hui Wang**</a>
+</p>
+<p style="font-size: 0.6em; margin-top: 1.5em;">
+    **Supervisor Team:** <br> <a href="https://research.monash.edu/en/persons/athanasios-pantelous">**Athanasios Pantelous**</a> <br> <a href="https://research.monash.edu/en/persons/natalia-bailey">**Natalia Bailey**<a> <br> <a href="https://www.stavroglou.com/">**Stavros Stavroglou**</a>
+</p>
+
+## {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+![](images/logo.png){.absolute left=0 right=0 bottom=0 top=0 height="80%" style="margin: auto auto;"}
+
+
+## {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+
+
+<br>
+<br>
+<br>
+
+<ul>
+<li><div class="cran">
+  <style>
+    .icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+    }
+  </style>
+  <svg class='icon' width="800px" height="800px" viewBox="0 -31.5 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid">
+      <defs>
+          <linearGradient x1="37.9725688%" y1="16.9988952%" x2="91.1208363%" y2="76.3260008%" id="linearGradient-1">
+              <stop stop-color="#C9CBCE" offset="0%">
+  </stop>
+              <stop stop-color="#7B7A81" offset="100%">
+  </stop>
+          </linearGradient>
+      </defs>
+    <g>
+      <path d="M149.333,149.333 C96,149.333 50.674,122.62 50.674,90.62 C50.674,58.62 90.667,32 144,32 C211.357,32 242.572,57.911 242.572,89.911 C242.572,121.911 208.165,149.333 149.333,149.333 M128,0 C58.667,0 0,37.333 0,85.333 C0,130.667 58.312,168.302 127.646,168.302 C196.979,168.302 256,133.333 256,85.333 C256,37.333 197.333,0 128,0" fill="url(#linearGradient-1)">
+  </path>
+      <path d="M105.946,51.829 L105.946,192.938 L148.589,192.938 L148.589,138.063 C159.25,138.063 165.6,135.735 172.575,148.515 C183.236,166.807 196.562,192.938 196.562,192.938 L247.2,192.938 C247.2,192.938 215.218,140.676 212.553,138.063 C207.638,132.836 201.892,132.836 193.897,130.223 C209.888,127.61 224.796,120.975 229.979,106.759 C234.51,93.694 233.977,77.074 224.265,65.929 C215.854,57.11 207.223,51.829 185.901,51.829 L105.946,51.829 L105.946,51.829 Z M148.589,81.217 L176.573,81.217 C183.209,81.217 188.566,87.75 188.566,94.282 C188.566,100.815 183.236,107.348 176.573,107.348 L148.589,107.348 L148.589,81.217 L148.589,81.217 Z" fill="#2165B6">
+  </path>
+    </g>
+  </svg>
+  <a href="https://CRAN.R-project.org/package=patterncausality" data-preview-link="true">&nbsp;&nbsp;&nbsp;<strong>patterncausality</strong> package</a>
+</div></li>
+
+<li><div class="github">
+  <style>
+    .icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+    }
+  </style>
+  <svg class='icon' version="1.0" xmlns="http://www.w3.org/2000/svg"
+  width="240.000000pt" height="240.000000pt" viewBox="0 0 240.000000 240.000000"
+  preserveAspectRatio="xMidYMid meet">
+  <g transform="translate(0.000000,240.000000) scale(0.100000,-0.100000)"
+  fill="#000000" stroke="none">
+  <path d="M970 2301 c-305 -68 -555 -237 -727 -493 -301 -451 -241 -1056 143
+  -1442 115 -116 290 -228 422 -271 49 -16 55 -16 77 -1 24 16 25 20 25 135 l0
+  118 -88 -5 c-103 -5 -183 13 -231 54 -17 14 -50 62 -73 106 -38 74 -66 108
+  -144 177 -26 23 -27 24 -9 37 43 32 130 1 185 -65 96 -117 133 -148 188 -160
+  49 -10 94 -6 162 14 9 3 21 24 27 48 6 23 22 58 35 77 l24 35 -81 16 c-170 35
+  -275 96 -344 200 -64 96 -85 179 -86 334 0 146 16 206 79 288 28 36 31 47 23
+  68 -15 36 -11 188 5 234 13 34 20 40 47 43 45 5 129 -24 214 -72 l73 -42 64
+  15 c91 21 364 20 446 0 l62 -16 58 35 c77 46 175 82 224 82 39 0 39 -1 55 -52
+  17 -59 20 -166 5 -217 -8 -30 -6 -39 16 -68 109 -144 121 -383 29 -579 -62
+  -129 -193 -219 -369 -252 l-84 -16 31 -55 32 -56 3 -223 4 -223 25 -16 c23
+  -15 28 -15 76 2 80 27 217 101 292 158 446 334 590 933 343 1431 -145 293
+  -419 518 -733 602 -137 36 -395 44 -525 15z"/>
+  </g>
+  </svg>
+  <a href="http://github.com/skstavroglou/pattern_causality">&nbsp;&nbsp;&nbsp;<strong>pattern_causality</strong> repositories</a>
+</div></li>
+
+<li><div class="website">
+  <style>
+    .icon {
+      width: 1em;
+      height: 1em;
+      vertical-align: -0.125em;
+    }
+  </style>
+  <svg class='icon' viewBox="0 0 60 64" xmlns="http://www.w3.org/2000/svg"><path d="m18.87 38c0 1.54 0.23 2.94 0.7 4.2 0.5 1.24 1.15 2.35 1.98 3.32s1.8 1.8 2.94 2.5c1.1 0.7 2.3 1.28 3.58 1.73 1.27 0.46 2.6 0.8 3.95 1.02 1.37 0.22 2.7 0.33 4.05 0.33 1.7 0 3.28-0.13 4.78-0.4 1.5-0.28 2.96-0.65 4.4-1.12s2.83-1.03 4.22-1.67c1.4-0.64 2.82-1.34 4.28-2.12v13.56c-1.63 0.8-3.23 1.47-4.83 2.05-1.6 0.56-3.2 1.05-4.83 1.44-1.63 0.4-3.28 0.7-4.97 0.88s-3.42 0.28-5.22 0.28c-2.4 0-4.72-0.28-6.95-0.83s-4.32-1.34-6.28-2.38-3.75-2.3-5.38-3.78c-1.64-1.48-3.03-3.15-4.2-5s-2.07-3.88-2.72-6.06c-0.63-2.18-0.95-4.5-0.95-6.96 0-2.63 0.36-5.13 1.08-7.52 0.73-2.4 1.76-4.58 3.12-6.58 1.35-2 3-3.78 4.95-5.33s4.14-2.82 6.58-3.8c-1.33 1.33-2.37 2.9-3.1 4.73-0.75 1.82-1.22 3.65-1.43 5.48h22.78c0-2.3-0.23-4.3-0.7-6.02s-1.22-3.15-2.27-4.28c-1.04-1.14-2.38-2-4.03-2.56-1.65-0.57-3.64-0.86-5.97-0.86-2.75 0-5.5 0.4-8.25 1.23-2.75 0.8-5.36 1.95-7.84 3.4-2.48 1.47-4.76 3.2-6.84 5.18-2.08 2-3.83 4.15-5.25 6.48 0.3-2.7 0.9-5.3 1.73-7.77s1.93-4.77 3.25-6.9c1.32-2.1 2.87-4.02 4.64-5.74s3.73-3.2 5.9-4.4 4.47-2.17 6.97-2.82c2.5-0.57 5.16-0.91 7.96-0.91 1.64 0 3.27 0.15 4.9 0.44 1.63 0.3 3.22 0.7 4.77 1.22 3.08 1.06 5.83 2.54 8.25 4.42 2.42 1.9 4.45 4.06 6.1 6.53s2.9 5.2 3.76 8.17 1.3 6.06 1.3 9.27v7.95h-40.91z" fill="#0078D7"/></svg>
+  <a href="https://www.stavroglou.com/pattern_causality/index.html" data-preview-link="true">&nbsp;&nbsp;&nbsp;<strong>pattern_causality</strong> website</a>
+</div></li>
+
+<li><div class="ssrn">
+  <style>
+    .icon2 {
+      width: 1.5em;
+      height: 1em;
+      vertical-align: -0.225em;
+    }
+    .st0{fill:#0D4C78;}
+  </style>
+  <svg class='icon2' xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 8000 3200">
+  <g>
+    <path class="st0" d="M1136.3,1326.7C595,1150,568,1133.7,445,1000c-84.2-92.2-130.2-212.9-128.7-337.7C316.3,373,552,164,879,164
+      c391,0,755.3,230.3,857.3,546.7c26.7,85.7,37.3,101.7,69.7,101.7c21.3,0,42.7-26.7,42.7-64.3c0-16-5.3-53.3-10.7-96.7
+      c-59-364-64.3-380-70-444.3c0-75-15.7-107.3-53.3-107.3c-8,1.3-15.5,5-21.3,10.7c-53.3,43-59,48.3-85.7,48.3
+      c-14.7-1.6-29.2-5.2-43-10.7c-284-118-332-134-535.7-134v0C461,14,69.7,346,69.7,812.3c0,209,70,380.3,203.7,520
+      c150,155,310.7,241,686,369.3c391,123.3,466,161,546.7,220c139,112.3,219.3,267.7,219.3,433.7c0,337.7-321.3,611-718,611
+      c-241,0-492.7-96.7-648.3-252C241.3,2596.7,161,2462.7,91.3,2259c-10.7-26.7-21.7-42.7-43-42.7c-26.7,0-48.3,26.7-48.3,64
+      c0,43,21.7,166.3,59,284c32.3,112.7,53.7,187.7,53.7,198.3c32.3,160.7,37.7,166,80.3,203.7c112.7,85.7,444.7,166,691.3,166
+      c616,0,1055.3-391,1055.3-937.7C1939.7,1793,1677.3,1503.7,1136.3,1326.7z"/>
+    <path class="st0" d="M3702.7,2194.7c-10.7-391-278.7-675-820-857.3c-546.7-182-573.3-192.7-691-326.7
+      c-84.1-92.2-130.1-212.9-128.7-337.7c0-294.7,235.7-498.3,562.7-498.3c391,0,750,230.3,857.3,546.7
+      c26.7,85.7,42.7,101.7,69.7,101.7c21.3,0,43-26.7,43-64.3c0-16-5.7-48-11-96.3c-59-364.3-64-380.3-69.7-444.7
+      c0-75-16-107.3-53.3-107.3c-10.7,0-16.3,5.3-21.7,10.7c-53.3,43.3-58.7,48.3-85.7,48.3c-10.7,0-21.3-5.3-43-10.7
+      c-278.3-123.3-332-134-530.3-134l0,0c-407.3,0-723.3,166-868,434l32,219.7c5.7,32,5.3,53.3,5.3,64.3c0,85.7-53.3,150-123,166
+      c16,166.3,85.7,311,203.3,428.7c150,155.3,311,241.3,686,370c386,128.3,466.3,160.7,546.7,219.3c139.3,107.3,219.7,268,219.7,434
+      c0,337.7-321.3,611-718,611c-241,0-493.3-96.7-648.3-251.7c-48.7-48.8-91.8-102.8-128.7-161c-32,75-69.7,150-112.7,214.3
+      c32.3,150,37.7,161,80.7,193c112.3,85.7,444.7,166,691,166C3258,3132.3,3702.7,2741.3,3702.7,2194.7z"/>
+    <polygon class="st0" points="7935.7,121 7935.7,121 7935.7,121 	"/>
+    <path class="st0" d="M7935.7,121c-26.7,0-59,5.3-107.3,11c-53.3,10.7-107,16-198.3,16c-128.3,0-342.7-10.7-423.3-16l-96.3-5.3
+      c-42.7,0-64.3,16-64.3,42.7c0,32,16.3,48.3,64.3,59c418,59,455.7,155.3,444.7,1178.7v1050c0,70-5.3,86-26.7,80.7
+      c-10.7,0-26.7-16-59-53.3L5454.7,191c-42.7-48.3-69.7-64.3-117.7-64.3c-16,0-43,0-75,5.3h-37.7c-10.7,0-107,0-171.3-5.3
+      c26.7,16,53.3,37.3,80,53.3c193.3,144.7,311,391.3,311,659c0,43-5.3,86-10.7,123.3v1393.3l53.3,80c48.3,70,86,128.7,123.3,182.3
+      V1048c0-75,10.7-96.3,43-96.3c21.3,0,26.7,5.3,53.3,32l1848.7,2122c70,80.3,70,80.3,102,80.3c53.3,0,69.7-32.3,69.7-128.7v-42.7
+      c5.3-128.7,5.3-326.7,5.3-605.7V983.7l5.3-139C7732,314,7753.3,260.3,7957,207c32-5.3,43-16.3,43-37.7
+      C8000,142.7,7973.3,121,7935.7,121z"/>
+    <path class="st0" d="M6060.3,3036c-230.3,5.3-386-123.3-659-541.3l-611-889.3C5143.7,1423,5337,1166,5337,839
+      c0-235.7-96.7-444.7-268-573.3c-171.3-128.3-391.3-182-734-182c-102,0-214.3,5.3-326.7,10.7c-241.3,16-241.3,16-354,16h-42.7
+      c11.8,32.7,17.3,67.3,16,102c5.3,42.7,5.3,64.3,37.3,241l37.7,235.7c3.7,21.2,5.4,42.8,5.3,64.3c1.2,46-16.2,90.4-48.3,123.3V1718
+      c96.7,139,144.7,300,144.7,482c0,209-59,396.7-160.7,552c-26.7,193-96.7,241-273.3,294.7c-42.7,10.7-53.3,16-53.3,43
+      c0,32,16,42.7,58.7,42.7c16,0,70-5.3,112.7-10.7c75-10.7,187.7-16,294.7-16c209,0,439.3,5.3,493,16c59,5.3,107,10.7,134,10.7
+      c37.3,0,69.7-16,69.7-42.7c0-26.7-26.7-43-80.3-48.3c-311-32-412.7-144.7-402-450V1798c5.3-74.7,16-85.7,128.7-80h241
+      c96.7,0,123.3,16,171.7,91c16,26.7,26.7,42.7,26.7,48l541,830.7c220,337.7,412.7,466.3,680.7,466.3c160.7,0,310.7-43,310.7-86
+      C6097.7,3052,6081.7,3036,6060.3,3036z M4393.7,1551.7h-246.3c-144.7-5.3-155.3-16-155.3-155.3V507c0-150,0-166.3,26.7-203.7
+      c32.3-43,96.7-69.7,198.3-69.7c203.7,0,423.3,69.7,546.7,182.3C4919,544.3,5010,758.7,5010,962.7
+      C5010,1326.7,4779.7,1551.7,4393.7,1551.7z"/>
+  </g></svg>
+  <a href="https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4966221" data-preview-link="true">&nbsp;<strong>patterncausality</strong> paper</a>
+</div></li>
+</ul>
+
+# Pattern Causality Algorithm
+
+## {.smaller}
+
+<br>
+
+### Attractors Reconstruction
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+\begin{align*}
+\text{state space form:}&&M_X(t) &= \left\{ X(t + k \tau) \right\}_{k=0}^{E-1} \\
+\text{distance matrix form:}&&D_X(t) &= \left\{ d\left( M_X(t), M_X(s) \right) \right\}_{s=1}^{n+(E-1)\tau}
+\end{align*}
+
+
+<br>
+
+::: {.fragment .fade-out}
+$E$ is the embed dimension parameters, and $\tau$ is the time delay parameter, where $1 \leq t \leq L$, with $X(\cdot)$ as a column vector.
+
+<br>
+
+\begin{align*}
+\begin{pmatrix}
+X(1) \\
+X(2) \\
+\vdots \\
+X(L)
+\end{pmatrix}
+\Rightarrow
+\begin{pmatrix}
+\{ X(1), X(1+\tau), \ldots, X(1+(E-1)\tau) \} \\
+\{ X(2), X(2+\tau), \ldots, X(2+(E-1)\tau) \} \\
+\vdots \\
+\{ X(L-(E-1)\tau), X(L-(E-2)\tau), \ldots, X(L) \}
+\end{pmatrix}
+\end{align*}
+:::
+
+::: {.fragment .absolute right=180 top=250 height="20%"}
+```{ojs}
+imgXD = {
+  let div = d3.create("div").style("width", "700px").style("height", "500px");
+  let chart = echarts.init(div.node());
+  chart.setOption(xoption);
+  return div.node();
+}
+```
+:::
+
+```{ojs}
+xoption = {
+  return{
+  xAxis: {
+    type: 'value',
+    axisLine: {
+      lineStyle: {
+        color: 'black',
+        width: 2
+      },
+      onZero: false
+    },
+  },
+  yAxis: {
+    type: 'value',
+    axisLine: {
+      lineStyle: {
+        color: 'black',
+        width: 2
+      },
+      onZero: false
+    },
+  },
+  dataset: {
+        dimensions: [
+        "time",
+        "x",
+        ],
+        source: transpose(rectsx)
+  },
+  series: [
+    {
+      symbolSize: 0,
+      type: 'line'
+    }
+  ]
+};
+};
+```
+
+
+
+```{r}
+#| context: server-start
+library(deSolve)
+library(plot3D)
+
+parameters <- c(sigma = 10, rho = 28, beta = 8/3)
+state      <- c(x = 1, y = 1, z = 1)
+times      <- seq(0, 100, by = 0.01)
+
+lorenz <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+    dx <- sigma * (y - x)
+    dy <- x * (rho - z) - y
+    dz <- x * y - beta * z
+    list(c(dx, dy, dz))
+  })
+}
+
+out <- ode(y = state, times = times, func = lorenz, parms = parameters)
+y_data <- out[, c("time","x")]
+```
+
+```{r}
+#| context: server
+
+dfx <- reactive({data.frame(y_data)})
+
+ojs_define(rectsx = dfx)
+```
+
+
+## {.smaller .scrollable transition="slide" auto-animate=true}
+
+<br>
+
+::: panel-tabset
+
+### $E=2$
+
+<div style="display: flex; justify-content: center;">
+```{ojs}
+img2D = {
+  let div = d3.create("div").style("width", "500px").style("height", "500px");
+  let chart = echarts.init(div.node());
+  chart.setOption(option2);
+  return div.node();
+}
+```
+</div>
+<div style="text-align: center;">
+```{ojs}
+viewof tau2 = Inputs.bind(htl.html`<input type=range style="width: 100px;">`, Inputs.range([1, 100], {step: 1, value: 10}))
+```
+</div>
+
+```{ojs}
+option2 = {
+  return{
+  xAxis: {
+        axisLine: {
+          lineStyle: {
+            color: 'black',
+            width: 2
+          },
+          onZero: false
+        },
+      },
+  yAxis: {
+        axisLine: {
+          lineStyle: {
+            color: 'black',
+            width: 2
+          },
+          onZero: false
+        },
+  },
+  dataset: {
+        dimensions: [
+        "X1",
+        "X2",
+        ],
+        source: transpose(rects4)
+  },
+  series: [
+    {
+      symbolSize: 0,
+      type: 'line'
+    }
+  ]
+};
+};
+```
+
+
+
+```{r}
+#| context: server-start
+library(deSolve)
+library(plot3D)
+
+parameters <- c(sigma = 10, rho = 28, beta = 8/3)
+state      <- c(x = 1, y = 1, z = 1)
+times      <- seq(0, 100, by = 0.01)
+
+lorenz <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+    dx <- sigma * (y - x)
+    dy <- x * (rho - z) - y
+    dz <- x * y - beta * z
+    list(c(dx, dy, dz))
+  })
+}
+
+out <- ode(y = state, times = times, func = lorenz, parms = parameters)
+x_data <- out[, "x"]
+emb <- function(x,E=2,tau){
+  n <- length(x)
+  max_index <- n - (E - 1) * tau
+  embedded <- matrix(0, nrow = max_index, ncol = E)
+  for (i in 1:E) {
+    embedded[, i] <- x[((1:max_index) + (i - 1) * tau)]
+  }
+  data.frame(embedded)
+}
+```
+
+```{r}
+#| context: server
+
+tauu <- reactive(req(input$tau2))
+
+df4 <- reactive({
+  emb(x_data,2,tauu())
+})
+
+ojs_define(rects4 = df4)
+```
+
+### $E=3$
+
+```{ojs}
+echarts = require("echarts", "echarts-gl")
+```
+
+<div style="display: flex; justify-content: center;">
+```{ojs}
+img3D = {
+  let div = d3.create("div").style("width", "700px").style("height", "500px");
+  let chart = echarts.init(div.node());
+  chart.setOption(option);
+  return div.node();
+}
+```
+</div>
+<div style="text-align: center;">
+```{ojs}
+viewof tau = Inputs.bind(htl.html`<input type=range style="width: 100px;">`, Inputs.range([1, 100], {step: 1, value: 10}))
+```
+</div>
+
+```{ojs}
+option = {
+  return {
+    xAxis3D: {
+      type: "value"
+    },
+    yAxis3D: {},
+    zAxis3D: {},
+    grid3D: {
+        viewControl: {
+        projection: 'orthographic'
+        }
+    },
+    dataset: {
+      dimensions: [
+        "X1",
+        "X2",
+        "X3"
+      ],
+      source: transpose(rects3)
+    },
+    series: [
+      {
+        type: "line3D",
+        lineStyle: {
+            width: 4
+        }
+      }
+    ]
+  };
+}
+```
+
+```{r}
+#| context: server-start
+library(deSolve)
+library(plot3D)
+
+parameters <- c(sigma = 10, rho = 28, beta = 8/3)
+state      <- c(x = 1, y = 1, z = 1)
+times      <- seq(0, 100, by = 0.01)
+
+lorenz <- function(t, state, parameters) {
+  with(as.list(c(state, parameters)), {
+    dx <- sigma * (y - x)
+    dy <- x * (rho - z) - y
+    dz <- x * y - beta * z
+    list(c(dx, dy, dz))
+  })
+}
+
+out <- ode(y = state, times = times, func = lorenz, parms = parameters)
+x_data <- out[, "x"]
+emb <- function(x,E=2,tau){
+  n <- length(x)
+  max_index <- n - (E - 1) * tau
+  embedded <- matrix(0, nrow = max_index, ncol = E)
+  for (i in 1:E) {
+    embedded[, i] <- x[((1:max_index) + (i - 1) * tau)]
+  }
+  data.frame(embedded)
+}
+```
+
+```{r}
+#| context: server
+
+taa <- reactive(req(input$tau))
+
+df3 <- reactive({
+  emb(x_data,3,taa())
+})
+
+ojs_define(rects3 = df3)
+```
+:::
+
+
+## {.smaller}
+
+<br>
+
+### Nearest Neighbors
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+\begin{align*}
+\text{nearest neighbors form:} \quad & N_{x,i} = \operatorname*{arg\,min}_{N \in M_X}\ d(M_{X,t}, N) \\
+\text{time record form:} \quad & T_{x,i} = R(N_{x,i}), \quad i = 1, \dots, E+1 \\
+\text{$h$ steps ahead form:} \quad & T_{y,i} = T_{x,i+h}, \quad i = 1, \dots, E+1
+\end{align*}
+
+<br>
+
+At time $t$, we select the $E+1$ points nearest to $M_{X,t}$. Here, $R(\cdot)$ denotes the process of recording the time points $T_{x,i}$ of all nearest neighbors $N_{x,i}$. We then record the time points $T_{y,i}$ by advancing each $T_{x,i}$ forward by $h$ steps, that is, $T_{y,i}$.
+
+<br>
+
+::: {.fragment}
+We present a simulation of finding the nearest neighbors on three reconstructed attractors.
+:::
+
+##
+
+<br>
+
+```{ojs}
+//| panel: sidebar
+viewof dimensionSelector = radio({
+  title: "Select Coordinate Time Series",
+  options: [
+    { value: 0, label: "X" },
+    { value: 1, label: "Y" },
+    { value: 2, label: "Z" },
+  ],
+  value: 0,
+})
+
+viewof k = slider({
+  min: 0,
+  max: 100,
+  step: 1,
+  value: 5,
+  title: "k Nearest Neighbors"
+});
+
+viewof tauSlider = slider({
+  min: 0,
+  max: 100,
+  step: 1,
+  value: 5,
+  title: "Embedding Delay (τ)"
+});
+```
+
+```{ojs}
+//| panel: center
+manifold = {
+  const width = 600;
+  const height = 500;
+  const padding = 10;
+  const pointRadius = scatterSize;
+  const onOpacity = 1;
+  const outOpacity = 0;
+
+  const plotAreaWidth = width - 2 * padding;
+  const plotAreaHeight = height - 2 * padding;
+
+  const xScale = d3.scaleLinear()
+    .domain(d3.extent(lorenzCoordinate, d => d[0]))
+    .range([0, plotAreaWidth]);
+
+  const yScale = d3.scaleLinear()
+    .domain(d3.extent(lorenzCoordinate, d => d[1]))
+    .range([plotAreaHeight, 0]);
+
+  const svg = d3.select(DOM.svg(width, height))
+    .style("background", 'none');
+
+  const zoom = d3.zoom()
+    .scaleExtent([0.5, 10])
+    .on("zoom", zoomed);
+
+  const g = svg
+    .append("g")
+    .attr("transform", `translate(${padding}, ${padding})`);
+
+  svg.call(zoom);
+
+  const line = d3.line()
+    .x(d => xScale(d[0]))
+    .y(d => yScale(d[1]));
+
+  g.append("path")
+    .datum(lorenzCoordinate)
+    .attr("class", "line")
+    .attr("d", line)
+    .style("fill", "none")
+    .style("stroke", "grey")
+    .style("stroke-width", 0.5);
+
+  const voronoiDiagram = d3
+    .voronoi()
+    .x(d => xScale(d[0]))
+    .y(d => yScale(d[1]))
+    .extent([[0, 0], [plotAreaWidth, plotAreaHeight]])(lorenzCoordinate);
+
+  const voronoiPolygons = g
+    .append("g")
+    .attr("class", "voronoi-polygons")
+    .style("pointer-events", "none")
+    .selectAll("path.polygon")
+    .data(voronoiDiagram.polygons())
+    .enter()
+    .append("path")
+    .attr("class", "polygon")
+    .style("stroke-width", 0.2)
+    .style("stroke", "white")
+    .style("background", "black")
+    .style("fill", "white")
+    .style("opacity", onOpacity)
+    .attr("d", (d) => `M${d.join("L")}Z`);
+
+  console.log(voronoiDiagram.polygons());
+
+  const circles = g
+    .append("g")
+    .attr("class", "circles")
+    .selectAll(".data-point")
+    .data(lorenzCoordinate)
+    .enter()
+    .append("circle")
+    .classed("data-point", true)
+    .attr("r", pointRadius)
+    .attr("cx", d => xScale(d[0]))
+    .attr("cy", d => yScale(d[1]))
+    .attr("fill", "black")
+    .on("mouseover", function (event, d) {
+      const index = lorenzCoordinate.indexOf(d);
+      const prevPoint = lorenzCoordinate[index - 1];
+      let distance = "N/A";
+
+      if (prevPoint) {
+        const dx = d[0] - prevPoint[0];
+        const dy = d[1] - prevPoint[1];
+        distance = Math.sqrt(dx * dx + dy * dy).toFixed(2);
+      }
+
+      tooltip.style("display", "block")
+        .html(`Index: ${index}<br>Distance: ${distance}`)
+        .style("left", `${event.pageX + 5}px`)
+        .style("top", `${event.pageY + 5}px`);
+    })
+    .on("mouseout", () => {
+      tooltip.style("display", "none");
+    });
+
+  g.append("rect")
+    .attr("class", "overlay")
+    .attr("width", plotAreaWidth)
+    .attr("height", plotAreaHeight)
+    .style("opacity", 0)
+    .on("mousemove", mouseMoveHandler)
+    .on("mouseleave", () => highlight(null));
+
+  const tooltip = d3.select("body").append("div")
+    .attr("class", "tooltip")
+    .style("position", "absolute")
+    .style("background", "rgba(0, 0, 0, 0.7)")
+    .style("color", "white")
+    .style("padding", "5px")
+    .style("border-radius", "3px")
+    .style("display", "none");
+
+  g.append("circle")
+    .attr("class", "highlight-circle")
+    .attr("r", pointRadius + 2)
+    .style("fill", "black")
+    .style("background", 'black')
+    .style("display", "none")
+    .attr('background', 'black');
+
+  function euclideanDistance(a, b) {
+    const dx = a[0] - b[0];
+    const dy = a[1] - b[1];
+    return Math.sqrt(dx * dx + dy * dy);
+  }
+
+  function getNNN(data, point, k) {
+    return data
+      .map((d, i) => ({ index: i, distance: euclideanDistance(d, point) }))
+      .sort((a, b) => a.distance - b.distance)
+      .slice(1, k + 1)
+      .map(d => d.index);
+  }
+
+  function highlight(d) {
+    if (!d) {
+      d3.select(".highlight-circle").style("display", "none");
+    } else {
+      d3.selectAll(".neighbor-line").remove();
+      d3.select(".highlight-circle")
+        .style("display", "")
+        .attr("cx", xScale(d[0]))
+        .attr("cy", yScale(d[1]))
+        .attr("stroke", "black")
+        .style("fill", "black");
+
+      let loc = d.slice(0, 2);
+      let nn = getNNN(lorenzCoordinate, loc, k);
+      g.selectAll(".polygon").style("opacity", (d, i) =>
+        nn.indexOf(i) > -1 ? onOpacity : outOpacity
+      ).style("fill", (d, i) =>
+        nn.indexOf(i) > -1 ? "hsl(" + i * 0.9 * 360 + ",50%,50%)" : 'white'
+      );
+
+      const points = lorenzCoordinate.filter((d, i) => nn.indexOf(i) > -1);
+      g.selectAll(".line")
+        .data(points)
+        .enter()
+        .append("line")
+        .attr("class", "neighbor-line")
+        .attr("x1", xScale(loc[0]))
+        .attr("y1", yScale(loc[1]))
+        .attr("x2", d => xScale(d[0]))
+        .attr("y2", d => yScale(d[1]))
+        .attr("stroke", "grey")
+        .style("stroke-width", 0.2)
+        .style("pointer-events", "none")
+        .style("opacity", 1);
+
+      const distances = points.map(p => euclideanDistance(p, loc));
+      dataScope.lastDataHovered = d;
+    }
+  }
+
+  function mouseMoveHandler() {
+    const [mx, my] = d3.mouse(this);
+    const closestPoint = voronoiDiagram.find(mx, my, plotAreaWidth);
+    highlight(closestPoint && closestPoint.data);
+  }
+
+  function zoomed() {
+    g.attr("transform", d3.event.transform);
+  }
+
+  highlight(dataScope.lastDataHovered)
+
+  yield svg.node()
+}
+```
+
+
+```{ojs}
+mutable kNNdistances = []
+```
+
+```{ojs}
+lorenz = (t, a) => {
+  const [x, y, z] = a
+  return [
+    sigma*(y-x),
+    x*(rho-z)-y,
+    x*y-beta*z
+  ]}
+```
+
+```{ojs}
+dataScope = ({lastDataHovered: lorenzCoordinate[100]})
+```
+
+```{ojs}
+makeData = (n) => {
+  return d3.range(n).map(() => {
+    let x = Math.random()* (plotAreaWidth - padding) + padding / 2;
+    let y = Math.random() * (plotAreaHeight - padding) + padding / 2;
+    return [x, y, Math.round(Math.random())];
+  });
+};
+```
+
+```{ojs}
+height = 1000;
+padding = 1;
+plotAreaHeight = height - padding - padding;
+width = 1000
+plotAreaWidth = width - padding - padding;
+pointRadius = 1;
+outOpacity = 0.;
+onOpacity = 1.0;
+x0=1;
+y0=1;
+z0=0;
+dt=0.01;
+sigma=10;
+beta=3;
+rho=20;
+t=5000;
+scatterSize=1;
+```
+
+```{ojs}
+function lorenzAttractor() {
+  let x = x0, y = y0, z = z0;
+  const data = [];
+
+  for (let i = 0; i < t; i++) {
+    const dx = sigma * (y - x);
+    const dy = x * (rho - z) - y;
+    const dz = x * y - beta * z;
+
+    x += dx * dt;
+    y += dy * dt;
+    z += dz * dt;
+
+    data.push([x, y, z]);
+  }
+  return data;
+}
+```
+
+```{ojs}
+function takensEmbedding(data, tau, dimension = 3) {
+  const embedded = [];
+  for (let i = 0; i < data.length - (dimension - 1) * tau; i++) {
+    const point = [];
+    for (let j = 0; j < dimension; j++) {
+      point.push(data[i + j * tau]);
+    }
+    embedded.push(point);
+  }
+  return embedded;
+}
+```
+
+```{ojs}
+function performTakensEmbedding() {
+  const lorenzData = lorenzAttractor();
+  const tau = tauSlider;
+  const dimension = dimensionSelector;
+  const selectedData = lorenzData.map(d => d[dimension]); 
+  const embeddedData = takensEmbedding(selectedData, tau, 3); 
+  return embeddedData.map(d => d.flat());
+}
+```
+
+```{ojs}
+lorenzCoordinate = performTakensEmbedding();
+```
+
+```{ojs}
+dist = (x, y) => (x[0] - y[0]) ** 2 + (x[1] - y[1]) ** 2;
+```
+
+```{ojs}
+function getNNN(data, loc, k) {
+  let dists = [];
+  for (let i = 0; i < data.length; i++) {
+    dists.push([i, dist(data[i], loc)]);
+  }
+  dists.sort(function (a, b) {
+    return a[1] - b[1];
+  });
+  let res = [];
+  for (let i = 0; i < k; i++) {
+    res.push(dists[i][0]);
+  }
+  return res;
+}
+```
+
+
+```{ojs}
+d3 = require("d3@5")
+odex = import("https://cdn.skypack.dev/odex")
+math = import("https://cdn.skypack.dev/mathjs@12.4.2")
+import { inputsGroup } from '@bumbeishvili/input-groups'
+import {ternarySlider} from "@yurivish/ternary-slider"
+import {chart} from "@d3/contours"
+MathJax = require("https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js").catch(
+  () => window["MathJax"]
+)
+import {slider, checkbox, select, radio} from "@jashkenas/inputs"
+```
+
+## {.smaller}
+
+### Projection and pattern extraction
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+
+::: {.fragment .fade-out}
+\begin{align*}
+\text{projection distance form:}\quad & d_{y}(t) = \{d(M_Y(t), M_Y(T_{y,i}))\}_1^{E+1} \\
+\text{pattern extraction form:}\quad & \hat{P}_y(t+h) = \mathcal{G}(\hat{S}_y(t+h))\\
+\end{align*}
+
+where
+
+\begin{align*}
+\hat{S}_y(t+h) &= w(t) \cdot \hat{s}_y(t) \\
+w(t) &= \left\{\frac{e^{d_y(t_1)}}{\sum e^{d_y(t)}}, \dots, \frac{e^{d_y(t_{E+1})}}{\sum e^{d_y(t)}}\right\} \\
+\hat{s}_y(t) &= \mathcal{F}(M_Y(T_{y,i})) = \left\{ \frac{M_Y(T_{y,i+1})-M_Y(T_{y,i})}{M_Y(T_{y,i})} \right\}_{i=1}^{E+1}
+\end{align*}
+
+Here, $\mathcal{G}(\cdot)$ determines the pattern based on the value of $\hat{S}_y(t+h)$. For example, when $E=2$, $\hat{S}_y(t+h) > 0$, then $\nearrow$, if $\hat{S}_y(t+h) = 0$, then $\longrightarrow$, if $\hat{S}_y(t+h) < 0$, then $\searrow$.
+:::
+
+::: {.fragment}
+![](images/projection.svg){.absolute top=80 right=10 height="150%"}
+:::
+
+## {.smaller}
+
+### Build pattern causality matrix
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+
+\begin{align*}
+\text{real pattern form:}\quad & P_y(t) = \mathcal{G}(\mathcal{F}(M_Y(t))) \\
+\text{pattern causality matrix:}\quad & PC[P_x, P_y, t] = \text{erf} \left( \frac{\left\| \hat{S}_y(t+h) \right\|}{\left\| \mathcal{F}(M_X(t)) \right\|} \right)\\
+\text{erf function form:}\quad & \text{erf}(x) = \frac{1}{\sqrt{\pi}} \int_{-x}^{x} e^{-t^2} dt
+\end{align*}
+
+<br>
+
+:::{.fragment}
+```{ojs}
+plot2(erf, {
+  tdomain: [-2.85, 3.05],
+  xdomain: [-2.75, 2.75]
+})
+```
+
+
+```{ojs}
+function erf_cody(x) {
+  const xx = x * x;
+  if (xx <= 0.25) return x * cody_R1(xx);
+  const xs = Math.sign(x);  
+  const e_xx = Math.exp(-xx);
+  if (xx <= 16) return xs * (1 - e_xx * cody_R2(Math.abs(x)));
+  const xxi = 1 / xx;
+  return xs * (1 - e_xx / x * (0.5641895835477563 - xxi * cody_R3(xxi)));
+}
+```
+
+```{ojs}
+cody_R1 = R([3.209377589138469472562e+3, 3.774852376853020208137e+2, 1.138641541510501556495e+2, 3.161123743870565596947e+0, 1.857777061846031526730e-1], [2.844236833439170622273e+3, 1.282616526077372275645e+3, 2.440246379344441733056e+2, 2.360129095234412093499e+1, 1])
+```
+
+```{ojs}
+cody_R2 = R([1.23033935479799725272e+3, 2.05107837782607146532e+3, 1.71204761263407058314e+3, 8.81952221241769090411e+2, 2.98635138197400131132e+2, 6.61191906371416294775e+1, 8.88314979438837594118e+0, 5.64188496988670089180e-1, 2.15311535474403846343e-8], [1.23033935480374942043e+3, 3.43936767414372163696e+3, 4.36261909014324715820e+3, 3.29079923573345962678e+3, 1.62138957456669018874e+3, 5.37181101862009857509e+2, 1.17693950891312499305e+2, 1.57449261107098347253e+1])
+```
+
+```{ojs}
+cody_R3 = R([6.58749161529837803157e-4, 1.60837851487422766278e-2, 1.25781726111229246204e-1, 3.60344899949804439429e-1, 3.05326634961232344035e-1, 1.63153871373020978498e-2], [2.33520497626869185443e-3, 6.05183413124413191178e-2, 5.27905102951428412248e-1, 1.87295284992346047209e+0, 2.56852019228982242072e+0])
+```
+
+```{ojs}
+erf = erf_cody
+```
+
+```{ojs}
+function R(P, Q = []) {
+  const l = P.length - 1, m = Q.length - 1;
+  if (l === 5 && m < 0) return R_5(P);
+  if (l === 4 && m === 4) return R_4_4(P, Q);
+  if (l === 5 && m === 4) return R_5_4(P, Q);
+  if (l === 5 && m === 5) return R_5_5(P, Q);
+  if (l === 6 && m === 5) return R_6_5(P, Q);
+  if (l === 8 && m === 7) return R_8_7(P, Q);
+  throw new Error(`unsupported degree ${l},${m}`);
+}
+```
+
+```{ojs}
+function R_5([p0, p1, p2, p3, p4, p5]) {
+  return z => p0 + z * (p1 + z * (p2 + z * (p3 + z * (p4 + z * p5))));
+}
+
+function R_4_4([p0, p1, p2, p3, p4], [q0, q1, q2, q3, q4]) {
+  return z =>
+      (p0 + z * (p1 + z * (p2 + z * (p3 + z * p4))))
+      / (q0 + z * (q1 + z * (q2 + z * (q3 + z * q4))));
+}
+
+function R_5_4([p0, p1, p2, p3, p4, p5], [q0, q1, q2, q3, q4]) {
+  return z =>
+      (p0 + z * (p1 + z * (p2 + z * (p3 + z * (p4 + z * p5)))))
+      / (q0 + z * (q1 + z * (q2 + z * (q3 + z * q4))));
+}
+
+function R_5_5([p0, p1, p2, p3, p4, p5], [q0, q1, q2, q3, q4, q5]) {
+  return z =>
+      (p0 + z * (p1 + z * (p2 + z * (p3 + z * (p4 + z * p5)))))
+      / (q0 + z * (q1 + z * (q2 + z * (q3 + z * (q4 + z * q5)))));
+}
+
+function R_6_5([p0, p1, p2, p3, p4, p5, p6], [q0, q1, q2, q3, q4, q5]) {
+  return z =>
+      (p0 + z * (p1 + z * (p2 + z * (p3 + z * (p4 + z * (p5 + z * p6))))))
+      / (q0 + z * (q1 + z * (q2 + z * (q3 + z * (q4 + z * q5)))));
+}
+
+function R_8_7([p0, p1, p2, p3, p4, p5, p6, p7, p8], [q0, q1, q2, q3, q4, q5, q6, q7]) {
+  return z =>
+      (p0 + z * (p1 + z * (p2 + z * (p3 + z * (p4 + z * (p5 + z * (p6 + z * (p7 + z * p8))))))))
+      / (q0 + z * (q1 + z * (q2 + z * (q3 + z * (q4 + z * (q5 + z * (q6 + z * q7)))))));
+}
+```
+
+```{ojs}
+function plot2(f, {
+  tdomain = [-2.75, +2.75], 
+  xdomain,
+  ydomain,
+  margin3 = {top: 20, right: 30, bottom: 30, left: 40},
+  width3 = 640,
+  height3 = 240,
+  n = width3
+} = {}) {
+  const X = d3.range(n).map(d3.scaleLinear([0, n - 1], tdomain));
+  const Y = X.map(f);
+
+  const x = d3.scaleLinear().range([margin3.left, width3 - margin3.right]);
+  const y = d3.scaleLinear().range([height3 - margin3.bottom, margin3.top]);
+  if (xdomain === undefined) x.domain(tdomain).nice(20);
+  else x.domain(xdomain);
+  if (ydomain === undefined) y.domain(d3.extent(Y)).nice().domain();
+  else y.domain(ydomain);
+
+  const svg = d3.create("svg")
+      .attr("viewBox", [0, 0, width3, height3])
+      .style("max-width", `${width3}px`)
+      .style("display", "block")
+      .style("margin", "auto");
+
+  svg.append("g")
+      .attr("transform", `translate(0,${height3 - margin3.bottom + 12})`)
+      .call(d3.axisBottom(x.copy().interpolate(d3.interpolateRound)))
+      .call(g => g.select(".domain").remove())
+      .call(g => g.selectAll(".tick line").clone()
+          .attr("stroke-opacity", d => d ? 0.1 : 0.5)
+          .attr("y1", -height3));
+
+  svg.append("g")
+      .attr("transform", `translate(${margin3.left - 12},0)`)
+      .call(d3.axisLeft(y.copy().interpolate(d3.interpolateRound)).ticks(5))
+      .call(g => g.select(".domain").remove())
+      .call(g => g.selectAll(".tick line").clone()
+          .attr("stroke-opacity", d => d ? 0.1 : 0.5)
+          .attr("x1", width3));
+
+  svg.append("path")
+      .attr("fill", "none")
+      .attr("stroke", "#c4238f")
+      .attr("stroke-width", 2)
+      .attr("d", d3.line().x(d => x(d)).y((d, i) => y(Y[i]))(X));
+
+  return svg.node();
+}
+```
+:::
+
+
+## {.smaller}
+
+### Build pattern causality matrix
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+
+::: {.fragment .fade-out}
+\begin{align*}
+\text{real pattern form:}\quad & P_y(t) = \mathcal{G}(\mathcal{F}(M_Y(t))) \\
+\text{pattern causality matrix:}\quad & PC[P_x, P_y, t] = \text{erf} \left( \frac{\left\| \hat{S}_y(t+h) \right\|}{\left\| \mathcal{F}(M_X(t)) \right\|} \right)\\
+\text{erf function form:}\quad & \text{erf}(x) = \frac{1}{\sqrt{\pi}} \int_{-x}^{x} e^{-t^2} dt
+\end{align*}
+
+<br>
+
+The columns and rows of the PC matrix are determined by the number of patterns in $M_X$ and $M_Y$, respectively. We conclude that causality exists between them if and only if $P_y(t) = \hat{P}_y(t+h)$. The causal strength is calculated using the erf function and placed in the corresponding position of the PC matrix for that pattern pair.
+:::
+
+
+::: {.fragment}
+![](images/pc1.svg){.absolute top=280 left=10 height="23%"}
+:::
+
+::: {.fragment}
+![](images/pc2.svg){.absolute top=100 right=140 height="80%"}
+:::
+
+# Pseudocode
+## {.scrollable .smaller}
+
+
+```pseudocode
+#| html-indent-size: "1.2em"
+#| html-comment-delimiter: "//"
+#| html-line-number: true
+#| html-line-number-punc: ":"
+#| html-no-end: false
+#| pdf-placement: "htb!"
+#| pdf-line-number: true
+
+\begin{algorithm}
+\caption{Pattern Causality Algorithm}
+\begin{algorithmic}
+\Require $\mathcal{D} = \{(\mathbf{x}_{t}, \mathbf{y}_{t})\}_{t=1}^{n}$: series of observations of two random variables
+\Require $E$: embedding dimension; $\tau$: time delay; $h$: prediction horizon
+\Ensure Causality percentages $P = \{P_{\text{positive}}, P_{\text{negative}}, P_{\text{dark}}\}$
+\State
+\State \textbf{Step 1: Reconstruct State, Signature, and Pattern Spaces}
+    \State $M_s \gets \{ M_x, M_y \}$
+    \State $S_s \gets \{ \mathcal{F}(M_x),\mathcal{F}(M_y) \}$
+    \State $P_s \gets \{ \mathcal{G}(S_x),\mathcal{G}(S_y) \}$
+    \State $D \gets \{d(M_x), d(M_y) \}$
+\State
+\State \textbf{Step 2: Initialize Pattern Causality (PC) Matrix}
+    \State $m \gets 3^{E-1}$
+    \State $q \gets t^* $
+    \State $PC \gets 0_{m \times m \times q}$
+\State
+\State \textbf{Step 3: Main Causality Detection Loop}
+    \For{$i \gets FCP$ \textbf{to} $n - (E - 1)\tau - h$}
+        \State $N_{x,i} \gets \mathop{\arg\min}_{M_x} d(M_{x,i})$
+        \State $T \gets T_{rec}(N_{x,i})$
+        \State $S_{y,T+h} \gets S_{y}(T+h)$
+        \State $W_{y,T+h} \gets \frac{e^{D_{y,i}(T+h)}}{\sum e^{D_{y,i}(T+h)}}$
+        \State $\hat{S}_{y,i+h} \gets S_{y,T+h} \odot W_{y,T+h}$
+        \State $\hat{P}_{y,i+h} \gets \mathcal{G}(\hat{S}_{y,i+h})$
+        \If{$\hat{P}_{y,i+h} = P_{y,i+h}$}
+            \State $c \gets \text{erf}(\hat{S}_{y,i+h}, S_{x,i})$
+        \Else
+            \State $c \gets 0$
+        \EndIf
+        \State $PC^* \gets c$
+    \EndFor
+\State
+\State \textbf{Step 4: Calculate Causality Percentages}
+\If{$\mathbf{p}(PC^*) = \operatorname{diag}(PC) $}
+    \State $\theta^+ \gets PC^*$
+\ElsIf{$\mathbf{p}(PC^*) = \operatorname{antidiag}(PC) $}
+    \State $\theta^- \gets PC^*$
+\Else
+    \State $\theta^* \gets PC^*$
+\EndIf
+\State $P_{\text{positive}}, P_{\text{negative}}, P_{\text{dark}} \gets \{ \dfrac{\sum{\theta^+}}{\sum{\theta^+ + \theta^- + \theta^*}}, \dfrac{\sum{\theta^-}}{\sum{\theta^+ + \theta^- + \theta^*}}, \dfrac{\sum{\theta^*}}{\sum{\theta^+ + \theta^- + \theta^*}}\}$
+\end{algorithmic}
+\end{algorithm}
+```
+
+# *`patterncausality`* Package
+
+##
+
+```{mermaid}
+%%| fig-align: center
+flowchart TD
+    subgraph part1[" "]
+    A["`data()`"] --> |Data preparation| B(Data)
+    end
+    subgraph part2[" "]
+    B --> C["`pcLightweight()`"]
+    B --> D["`pcFullDetails()`"]
+    C -->|Estimate model| E("PC_Model")
+    D -->|Save variables| E("PC_Model")
+    end
+    subgraph part3[" "]
+    E -->|CV analysis| F["`pcCrossValidation()`"]
+    E -->|Large matrix| G["`pcMatrix()`"]
+    E -->|Effect analysis| H["`pcEffect()`"]
+    end
+    classDef blue fill:#DAE8F5
+    classDef red fill:#FDD9C9
+    classDef purple fill:#EBE9F3
+    class part1 blue
+    class part2 red
+    class part3 purple
+```
+
+
+##
+
+### Basic usage {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+- Datasets
+
+```{.r code-line-numbers="1|2-4"}
+library(patterncausality)
+data(climate_indices)
+data(DJS)
+data(AUCO)
+```
+
+:::{.fragment}
+
+- Estimate model
+
+```{.r}
+X <- climate_indices$PNA
+Y <- climate_indices$AAO
+pc <- pcLightweight(X,Y,3,2,"manhattan",1,FALSE)
+print(pc)
+```
+
+```{r}
+library(patterncausality)
+data(climate_indices)
+X <- climate_indices$PNA
+Y <- climate_indices$AAO
+pc <- pcLightweight(X,Y,3,2,"manhattan",1,FALSE, FALSE)
+print(pc)
+```
+
+- Plot result
+:::
+
+##
+
+### Basic usage {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+<br>
+
+:::: {.columns}
+::: {.column width="45%"}
+```{ojs}
+Plot.plot({
+  y: {domain: [0, 100], percent: true, inset: 10},
+  x: {label: ""},
+  style: {fontSize: "16px"},
+  marks: [
+    Plot.barY(transpose(tablepcc), {x: "status", y: "strength", fill: ['#808080', '#DCDCDC']}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+
+```{r}
+#| context: server-start
+library(patterncausality)
+data(climate_indices)
+X <- climate_indices$PNA
+Y <- climate_indices$AAO
+pc <- pcLightweight(X,Y,3,2,"manhattan",1,FALSE,FALSE)
+tablec = data.frame(
+    status = c("nocausality", "causality"),
+    strength = c(1-pc$total, pc$total) 
+)
+```
+
+```{r}
+#| context: server
+tpcc <- reactive(tablec)
+ojs_define(tablepcc=tpcc)
+```
+:::
+
+::: {.column width="10%"}
+<!-- empty column to create gap -->
+:::
+
+::: {.column width="45%"}
+```{ojs}
+Plot.plot({
+  y: {domain: [0, 50], percent: true, inset: 10},
+  x: {label: ""},
+  style: {fontSize: "16px"},
+  marks: [
+    Plot.barY(transpose(tablepc), {x: "status", y: "strength", fill: ['#5BA3CF', '#F6583E', '#6A51A3']}),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+
+```{r}
+#| context: server-start
+library(patterncausality)
+data(climate_indices)
+X <- climate_indices$PNA
+Y <- climate_indices$AAO
+pc <- pcLightweight(X,Y,3,2,"manhattan",1,FALSE,FALSE)
+table = data.frame(
+    status = colnames(pc)[-1],
+    strength = c(t(pc))[-1]  
+)
+```
+
+```{r}
+#| context: server
+tpc <- reactive(table)
+ojs_define(tablepc=tpc)
+```
+:::
+
+::::
+
+- Parameter selection
+
+```r
+dataset <- climate_indices[,-1]
+parameter <- optimalParametersSearch(Emax = 5, tauMax = 5,
++ metric = "manhattan", dataset = dataset)
+```
+
+##
+
+### Basic usage {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+- Full details
+
+```r
+pcfd <- pcFullDetails(X, Y, E = 3, tau = 2,
++ metric = "manhattan", h = 1, weighted = TRUE)
+names(pcfd)
+```
+
+```{r results = 'hide'}
+pcfd <- pcFullDetails(X, Y, E = 3, tau = 2,metric = "manhattan", h = 1, weighted = TRUE)
+```
+
+```{r}
+names(pcfd)
+```
+
+##
+
+### CV analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+- Import dataset
+
+```r
+library(patterncausality)
+data(climate_indices)
+```
+:::{.fragment}
+- Start analysis
+
+```r
+set.seed(123)
+X <- climate_indices$PNA
+Y <- climate_indices$NAO
+numberset <- c(100,200,300,400,500)
+pc_cv <- pcCrossValidation(X,Y,3,2,"manhattan",1,TRUE,numberset)
+print(pc_cv)
+```
+
+```{r results = 'hide'}
+set.seed(123)
+X <- climate_indices$PNA
+Y <- climate_indices$NAO
+numberset <- c(100,200,300,400,500)
+pc_cv <- pcCrossValidation(X,Y,3,2,"manhattan",1,TRUE,numberset)
+```
+
+```{r}
+print(pc_cv)
+```
+:::
+
+##
+
+### CV analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+- Plot results
+
+<div style="display: flex; justify-content: center;">
+```{ojs}
+Plot.plot({
+  x: {line: true, insetRight: 60},
+  y: {domain: [0, 60], axis: null, percent: true},
+  color: {
+    type: "ordinal",
+    domain: ["positive", "negative", "dark"],
+    range: ["#5BA3CF", "#F6583E", "#6A51A3"]
+  },
+  marks: [
+    Plot.line(transpose(pccv), {x: "sample", y: "Value", stroke: "Type"}),
+    Plot.text(transpose(pccv), {x: "sample", y: "Value", text: d => (d.Value * 100).toLocaleString(undefined, {maximumFractionDigits: 2}) + "%", fill: "currentColor", stroke: "#f0f1eb", strokeWidth: 8}),
+    Plot.text(transpose(pccv), Plot.selectLast({x: "sample", y: "Value", text: "Type", z: "Type", textAnchor: "start", dx: 25, fontWeight: "bold"})) 
+  ]
+})
+```
+</div>
+```{r}
+#| context: server-start
+library(patterncausality)
+library(tidyr)
+library(dplyr)
+data(climate_indices)
+set.seed(123)
+X <- climate_indices$PNA
+Y <- climate_indices$NAO
+numberset <- c(100,200,300,400,500)
+pc_cv <- pcCrossValidation(X,Y,3,2,"manhattan",1,TRUE,numberset)
+df <- pc_cv %>% 
+  mutate(sample = rownames(pc_cv)) %>% 
+  relocate(sample)
+df$sample <- as.numeric(df$sample)
+df_long <- df %>%
+  pivot_longer(cols = -sample, names_to = "Type", values_to = "Value")
+```
+
+```{r}
+#| context: server
+pcv <- reactive(df_long)
+ojs_define(pccv=pcv)
+```
+
+##
+
+### Large dataset analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+:::{.fragment .fade-out}
+- Import data
+
+```r
+library(patterncausality)
+data(DJS)
+```
+:::
+
+:::{.fragment}
+<div style="display: flex; justify-content: center;">
+```{ojs}
+Plot.plot({
+  style: "overflow: visible;",
+  y: {grid: true},
+  x: {type: "time"},
+  marks: [
+    Plot.ruleY([0]),
+    Plot.lineY(transpose(djsd), {x: "Date", y: "Value", stroke: "Symbol", tip: "x"})
+  ]
+})
+```
+</div>
+
+```{r}
+#| context: server-start
+library(patterncausality)
+library(tidyr)
+library(dplyr)
+data(DJS)
+df_djs <- DJS %>%
+  pivot_longer(cols = -Date, names_to = "Symbol", values_to = "Value")
+```
+
+```{r}
+#| context: server
+djsdata <- reactive(df_djs)
+ojs_define(djsd=djsdata)
+```
+:::
+
+##
+
+### Large dataset analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+- Start estimation
+
+```r
+dataset <- DJS[,-1]
+pcmatrix <- pcMatrix(dataset, E = 3, tau = 2,
++ metric = "manhattan", h = 1, weighted = TRUE)
+print(pcmatrix$positive[c(1:5),c(1:5)])
+```
+
+```{r}
+pcmatrix <- readRDS("data/djsmatrix.rds")
+print(pcmatrix$positive[c(1:5),c(1:5)])
+```
+
+- Items
+
+```r
+print(head(pcmatrix$items))
+```
+```{r}
+print(head(pcmatrix$items))
+```
+
+
+##
+
+### Large dataset analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+::: panel-tabset
+
+### Positive
+
+```{ojs}
+chart2 = {
+  
+  const matrixLayout = adjacencyMatrix()
+        .size([width2/2 - margin,height2-margin]);
+
+  const data = matrixLayout(labels, inputMatrix);
+  let dataFiltered = data;
+
+  color.domain([d3.min(data, d => d.value), d3.max(data, d => d.value)]);
+
+  const svg = d3.create("svg").attr("width",width2).attr("height",height2);
+  const chart_adj = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+  const chart_graph = svg.append("g").attr("transform", `translate(${[width2/2 + margin/2, margin/2]})`);
+  drawNetwork(data);
+  
+  const brush = d3.brush().on("brush end", detail);
+  
+  const innerChart = chart_adj.append('g').attr('class','innerChart');
+  const cell = innerChart
+          .selectAll("g.cell")
+          .data(data).join("g")
+          .attr("class", "cell")
+          .attr("transform", d => `translate(${[d.x,d.y]})`);
+  
+  cell.append("rect")
+          .attr("height", d => d.h*.95)
+          .attr("width", d => d.w*.95)
+          .attr("rx",d => d.w/4)
+          .attr("ry", d => d.h/4)
+          .style("fill", d => d.value ? color(d.value) : 'white')
+          .style("opacity",1);
+
+  chart_adj.append('g').attr('class', 'labels')
+          .selectAll('text.source')
+          .data(data.filter(d => d.x == 0))
+          .enter()
+          .append("text").attr("class",'source')
+          .attr("y", d => d.y + d.h/2) 
+          .attr("x", -18)
+          .text((d,i) => labels[i]);
+
+  chart_adj.append('g').attr('class', 'labels')
+          .selectAll('text.target')
+          .data(data.filter(d => d.y == 0))
+          .enter()
+          .append("text").attr("class",'target')
+          .attr("x", d => d.x + d.w/2+8)  
+          .attr("y", -10)
+          .attr("transform", d => `rotate(-90, ${d.x + d.w/2}, -10)`)
+          .text((d,i) => labels[i]);
+           
+  chart_adj.selectAll("text")
+          .style("font-family", "Arial, sans-serif")
+          .style("text-anchor", "middle")
+          .style("alignment-baseline", "middle")
+          .style("font-size", "10px");
+  
+  innerChart.call(brush);
+  
+  function detail({selection}) {
+    if (selection) { 
+      const [[x0, y0], [x1, y1]] = selection;
+      dataFiltered = data.filter(d => x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1);
+      cell.filter(d => !(x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1)).style("opacity", .3);
+      cell.filter(d => x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1).style("opacity", 1);
+    } else { 
+      dataFiltered = data;
+      cell.style("opacity", 1);
+    }
+    drawNetwork(dataFiltered);
+  }
+
+  function drag(simulation) {    
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+    
+    return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+  }
+  
+  
+  function drawNetwork(data) {
+    chart_graph.selectAll('g').remove();
+    const links_temp = data.filter(r => r.source);
+    const nodes_temp = data.map(d => d.source).concat(data.map(d => d.target)).filter((v, i, a) => a.indexOf(v) === i).filter(r => r);
+    let nodes_temp2 = [];
+    for (let i = 0; i < nodes_temp.length; i++) {
+      nodes_temp2.push({node: nodes_temp[i]});
+    }
+    const networkData = {nodes: nodes_temp2, links: links_temp}
+
+    const links = networkData.links.map(d => Object.create(d));
+    const nodes = networkData.nodes.map(d => Object.create(d));
+    
+    const sim = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.node).distance(250))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width2/4 - margin/2, height2/ 2 - margin/2));
+  
+    const link = chart_graph.append("g")
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke", d => color(d.value))
+        .attr("stroke-opacity", 0.5)
+        .attr("stroke-width", d => Math.sqrt(d.value));
+
+    const node = chart_graph.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+      .selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", 8)
+        .attr("fill", d3.color("#343434"))
+        .call(drag(sim));
+
+    node.append("title")
+        .text(d => d.node);
+
+    sim.on("tick", () => {
+      link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+      node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+    });
+    
+  }
+     
+  return svg.node();
+  
+}
+```
+
+```{ojs}
+color = d3.scaleSequential(d3.interpolateBlues)
+```
+
+```{ojs}
+import {adjacencyMatrix} from "@jannespeeters/simple-adjacency-matrix"
+```
+
+```{ojs}
+width2 = 1000
+height2 = 500
+margin = 100
+size = 29
+```
+
+
+```{r}
+#| context: server-start
+djs <- readRDS("data/djsmatrix.rds")
+mx <- djs$positive
+tickers <- c('MMM', 'AXP', 'AAPL', 'BA', 'CAT', 'CVX', 'CSCO', 'KO', 'DWDP', 'XOM', 'GE', 'GS', 'IBM', 'INTC', 'JNJ', 'JPM', 'MCD', 'MRK', 'MSFT', 'NKE', 'PFE', 'PG', 'HD', 'TRV', 'UTX', 'UNH', 'VZ', 'WMT', 'DIS')
+```
+
+```{r}
+#| context: server
+matrix <- reactive(mx)
+name <- reactive(tickers)
+ojs_define(inputMatrix = matrix, labels = name)
+```
+
+### Negative
+
+```{ojs}
+chart3 = {
+  
+  const matrixLayout = adjacencyMatrix()
+        .size([width2/2 - margin,height2-margin]);
+
+  const data = matrixLayout(labels2, inputMatrix2);
+  let dataFiltered = data;
+
+  color2.domain([d3.min(data, d => d.value), d3.max(data, d => d.value)]);
+
+  const svg = d3.create("svg").attr("width",width2).attr("height",height2);
+  const chart_adj = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+  const chart_graph = svg.append("g").attr("transform", `translate(${[width2/2 + margin/2, margin/2]})`);
+  drawNetwork(data);
+  
+  const brush = d3.brush().on("brush end", detail);
+  
+  const innerChart = chart_adj.append('g').attr('class','innerChart');
+  const cell = innerChart
+          .selectAll("g.cell")
+          .data(data).join("g")
+          .attr("class", "cell")
+          .attr("transform", d => `translate(${[d.x,d.y]})`);
+  
+  cell.append("rect")
+          .attr("height", d => d.h*.95)
+          .attr("width", d => d.w*.95)
+          .attr("rx",d => d.w/4)
+          .attr("ry", d => d.h/4)
+          .style("fill", d => d.value ? color2(d.value) : 'white')
+          .style("opacity",1);
+
+  chart_adj.append('g').attr('class', 'labels')
+          .selectAll('text.source')
+          .data(data.filter(d => d.x == 0))
+          .enter()
+          .append("text").attr("class",'source')
+          .attr("y", d => d.y + d.h/2) 
+          .attr("x", -18)
+          .text((d,i) => labels[i]);
+
+  chart_adj.append('g').attr('class', 'labels')
+          .selectAll('text.target')
+          .data(data.filter(d => d.y == 0))
+          .enter()
+          .append("text").attr("class",'target')
+          .attr("x", d => d.x + d.w/2+8) 
+          .attr("y", -10)
+          .attr("transform", d => `rotate(-90, ${d.x + d.w/2}, -10)`)
+          .text((d,i) => labels[i]);
+           
+  chart_adj.selectAll("text")
+          .style("font-family", "Arial, sans-serif")
+          .style("text-anchor", "middle")
+          .style("alignment-baseline", "middle")
+          .style("font-size", "10px");
+  
+  innerChart.call(brush);
+  
+  function detail({selection}) {
+    if (selection) { 
+      const [[x0, y0], [x1, y1]] = selection;
+      dataFiltered = data.filter(d => x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1);
+      cell.filter(d => !(x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1)).style("opacity", .3);
+      cell.filter(d => x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1).style("opacity", 1);
+    } else { 
+      dataFiltered = data;
+      cell.style("opacity", 1);
+    }
+    drawNetwork(dataFiltered);
+  }
+
+  function drag(simulation) {    
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+    
+    return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+  }
+  
+  
+  function drawNetwork(data) {
+    chart_graph.selectAll('g').remove();
+    const links_temp = data.filter(r => r.source);
+    const nodes_temp = data.map(d => d.source).concat(data.map(d => d.target)).filter((v, i, a) => a.indexOf(v) === i).filter(r => r);
+    let nodes_temp2 = [];
+    for (let i = 0; i < nodes_temp.length; i++) {
+      nodes_temp2.push({node: nodes_temp[i]});
+    }
+    const networkData = {nodes: nodes_temp2, links: links_temp}
+
+    const links = networkData.links.map(d => Object.create(d));
+    const nodes = networkData.nodes.map(d => Object.create(d));
+    
+    const sim = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.node).distance(250))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width2/4 - margin/2, height2/ 2 - margin/2));
+  
+    const link = chart_graph.append("g")
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke", d => color2(d.value))
+        .attr("stroke-opacity", 0.5)
+        .attr("stroke-width", d => Math.sqrt(d.value));
+
+    const node = chart_graph.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+      .selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", 8)
+        .attr("fill", d3.color("#343434"))
+        .call(drag(sim));
+
+    node.append("title")
+        .text(d => d.node);
+
+    sim.on("tick", () => {
+      link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+      node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+    });
+    
+  }
+     
+  return svg.node();
+  
+}
+```
+
+```{ojs}
+color2 = d3.scaleSequential(d3.interpolateReds)
+```
+
+```{r}
+#| context: server-start
+djs2 <- readRDS("data/djsmatrix.rds")
+mx2 <- djs2$negative
+tickers2 <- c('MMM', 'AXP', 'AAPL', 'BA', 'CAT', 'CVX', 'CSCO', 'KO', 'DWDP', 'XOM', 'GE', 'GS', 'IBM', 'INTC', 'JNJ', 'JPM', 'MCD', 'MRK', 'MSFT', 'NKE', 'PFE', 'PG', 'HD', 'TRV', 'UTX', 'UNH', 'VZ', 'WMT', 'DIS')
+```
+
+```{r}
+#| context: server
+matrix2 <- reactive(mx2)
+name2 <- reactive(tickers2)
+ojs_define(inputMatrix2 = matrix2, labels2 = name2)
+```
+
+### Dark
+
+```{ojs}
+chart4 = {
+  
+  const matrixLayout = adjacencyMatrix()
+        .size([width2/2 - margin,height2-margin]);
+
+  const data = matrixLayout(labels3, inputMatrix3);
+  let dataFiltered = data;
+
+  color3.domain([d3.min(data, d => d.value), d3.max(data, d => d.value)]);
+
+  const svg = d3.create("svg").attr("width",width2).attr("height",height2);
+  const chart_adj = svg.append("g").attr("transform", `translate(${[margin/2,margin/2]})`);
+  const chart_graph = svg.append("g").attr("transform", `translate(${[width2/2 + margin/2, margin/2]})`);
+  drawNetwork(data);
+  
+  const brush = d3.brush().on("brush end", detail);
+  
+  const innerChart = chart_adj.append('g').attr('class','innerChart');
+  const cell = innerChart
+          .selectAll("g.cell")
+          .data(data).join("g")
+          .attr("class", "cell")
+          .attr("transform", d => `translate(${[d.x,d.y]})`);
+  
+  cell.append("rect")
+          .attr("height", d => d.h*.95)
+          .attr("width", d => d.w*.95)
+          .attr("rx",d => d.w/4)
+          .attr("ry", d => d.h/4)
+          .style("fill", d => d.value ? color3(d.value) : 'white')
+          .style("opacity",1);
+
+  chart_adj.append('g').attr('class', 'labels')
+          .selectAll('text.source')
+          .data(data.filter(d => d.x == 0))
+          .enter()
+          .append("text").attr("class",'source')
+          .attr("y", d => d.y + d.h/2) 
+          .attr("x", -18)
+          .text((d,i) => labels[i]);
+
+  chart_adj.append('g').attr('class', 'labels')
+          .selectAll('text.target')
+          .data(data.filter(d => d.y == 0))
+          .enter()
+          .append("text").attr("class",'target')
+          .attr("x", d => d.x + d.w/2+8) 
+          .attr("y", -10)
+          .attr("transform", d => `rotate(-90, ${d.x + d.w/2}, -10)`)
+          .text((d,i) => labels[i]);
+           
+  chart_adj.selectAll("text")
+          .style("font-family", "Arial, sans-serif")
+          .style("text-anchor", "middle")
+          .style("alignment-baseline", "middle")
+          .style("font-size", "10px");
+  
+  innerChart.call(brush);
+  
+  function detail({selection}) {
+    if (selection) { 
+      const [[x0, y0], [x1, y1]] = selection;
+      dataFiltered = data.filter(d => x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1);
+      cell.filter(d => !(x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1)).style("opacity", .3);
+      cell.filter(d => x0 <= d.x && d.x < x1 && y0 <= d.y && d.y < y1 || x0 <= (d.x + d.w) && d.x < x1 && y0 <= (d.y + d.h) && d.y < y1).style("opacity", 1);
+    } else { 
+      dataFiltered = data;
+      cell.style("opacity", 1);
+    }
+    drawNetwork(dataFiltered);
+  }
+
+  function drag(simulation) {    
+    function dragstarted(event) {
+      if (!event.active) simulation.alphaTarget(0.3).restart();
+      event.subject.fx = event.subject.x;
+      event.subject.fy = event.subject.y;
+    }
+    
+    function dragged(event) {
+      event.subject.fx = event.x;
+      event.subject.fy = event.y;
+    }
+    
+    function dragended(event) {
+      if (!event.active) simulation.alphaTarget(0);
+      event.subject.fx = null;
+      event.subject.fy = null;
+    }
+    
+    return d3.drag()
+      .on("start", dragstarted)
+      .on("drag", dragged)
+      .on("end", dragended);
+  }
+  
+  
+  function drawNetwork(data) {
+    chart_graph.selectAll('g').remove();
+    const links_temp = data.filter(r => r.source);
+    const nodes_temp = data.map(d => d.source).concat(data.map(d => d.target)).filter((v, i, a) => a.indexOf(v) === i).filter(r => r);
+    let nodes_temp2 = [];
+    for (let i = 0; i < nodes_temp.length; i++) {
+      nodes_temp2.push({node: nodes_temp[i]});
+    }
+    const networkData = {nodes: nodes_temp2, links: links_temp}
+
+    const links = networkData.links.map(d => Object.create(d));
+    const nodes = networkData.nodes.map(d => Object.create(d));
+    
+    const sim = d3.forceSimulation(nodes)
+      .force("link", d3.forceLink(links).id(d => d.node).distance(250))
+      .force("charge", d3.forceManyBody())
+      .force("center", d3.forceCenter(width2/4 - margin/2, height2/ 2 - margin/2));
+  
+    const link = chart_graph.append("g")
+        .selectAll("line")
+        .data(links)
+        .join("line")
+        .attr("stroke", d => color3(d.value))
+        .attr("stroke-opacity", 0.5)
+        .attr("stroke-width", d => Math.sqrt(d.value));
+
+    const node = chart_graph.append("g")
+        .attr("stroke", "#fff")
+        .attr("stroke-width", 1.5)
+      .selectAll("circle")
+      .data(nodes)
+      .join("circle")
+        .attr("r", 8)
+        .attr("fill", d3.color("#343434"))
+        .call(drag(sim));
+
+    node.append("title")
+        .text(d => d.node);
+
+    sim.on("tick", () => {
+      link
+          .attr("x1", d => d.source.x)
+          .attr("y1", d => d.source.y)
+          .attr("x2", d => d.target.x)
+          .attr("y2", d => d.target.y);
+
+      node
+          .attr("cx", d => d.x)
+          .attr("cy", d => d.y);
+    });
+    
+  }
+
+  return svg.node();
+  
+}
+```
+
+```{ojs}
+color3 = d3.scaleSequential(d3.interpolatePurples)
+```
+
+```{r}
+#| context: server-start
+djs3 <- readRDS("data/djsmatrix.rds")
+mx3 <- djs3$dark
+tickers3 <- c('MMM', 'AXP', 'AAPL', 'BA', 'CAT', 'CVX', 'CSCO', 'KO', 'DWDP', 'XOM', 'GE', 'GS', 'IBM', 'INTC', 'JNJ', 'JPM', 'MCD', 'MRK', 'MSFT', 'NKE', 'PFE', 'PG', 'HD', 'TRV', 'UTX', 'UNH', 'VZ', 'WMT', 'DIS')
+```
+
+```{r}
+#| context: server
+matrix3 <- reactive(mx3)
+name3 <- reactive(tickers3)
+ojs_define(inputMatrix3 = matrix3, labels3 = name3)
+```
+
+:::
+
+
+
+##
+
+### Effect analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+- Estimate effects
+
+```r
+effects <- pcEffect(pcmatrix)
+head(effects$positive)
+```
+
+```{r}
+effects <- pcEffect(pcmatrix)
+head(effects$positive)
+```
+
+- Plot results
+
+
+##
+
+### Effect analysis {.smaller}
+
+![](images/logo.png){.absolute top=10 right=10 height="20%"}
+
+::: panel-tabset
+
+### Positive
+
+<div style="display: flex; justify-content: center;">
+```{ojs}
+Plot.plot({
+  style: {
+    backgroundColor: "transparent",
+  },
+  x: {
+    grid: true,
+    label: "Received →"
+  },
+  y: {
+    grid: true,
+    label: "↑ Exerted"
+  },
+  color: {
+    scheme: "Blues",
+    legend: true,
+    interpolate: t => d3.interpolateBlues(Math.pow(t, 0.5)),
+  },
+  marks: [
+    Plot.dot(transpose(djseff), {x: "received", y: "exerted", fill: "Diff", tip: true, title: "Company", r: 5})
+  ]
+})
+```
+</div>
+
+```{r}
+#| context: server-start
+library(patterncausality)
+pcmatrix <- readRDS("data/djsmatrix.rds")
+effects <- pcEffect(pcmatrix)
+effectsp <- effects$positive
+dfeff <- effectsp %>% 
+  mutate(Company = rownames(effectsp)) %>% 
+  relocate(Company) 
+```
+
+```{r}
+#| context: server
+eff <- reactive(dfeff)
+ojs_define(djseff=eff)
+```
+
+
+### Negative
+
+<div style="display: flex; justify-content: center;">
+```{ojs}
+Plot.plot({
+  style: {
+    backgroundColor: "transparent",
+  },
+  x: {
+    grid: true,
+    label: "Received →"
+  },
+  y: {
+    grid: true,
+    label: "↑ Exerted"
+  },
+  color: {
+    scheme: "Reds",
+    legend: true,
+    interpolate: t => d3.interpolateReds(Math.pow(t, 0.5)),
+  },
+  marks: [
+    Plot.dot(transpose(djseffn), {x: "received", y: "exerted", fill: "Diff", tip: true, title: "Company", r: 5})
+  ]
+})
+```
+</div>
+
+```{r}
+#| context: server-start
+library(patterncausality)
+pcmatrix <- readRDS("data/djsmatrix.rds")
+effects <- pcEffect(pcmatrix)
+effectsn <- effects$negative
+dfeffn <- effectsn %>% 
+  mutate(Company = rownames(effectsn)) %>% 
+  relocate(Company) 
+```
+
+```{r}
+#| context: server
+effn <- reactive(dfeffn)
+ojs_define(djseffn=effn)
+```
+
+### Dark
+
+<div style="display: flex; justify-content: center;">
+```{ojs}
+Plot.plot({
+  style: {
+    backgroundColor: "transparent",
+  },
+  x: {
+    grid: true,
+    label: "Received →"
+  },
+  y: {
+    grid: true,
+    label: "↑ Exerted"
+  },
+  color: {
+    scheme: "Purples",
+    legend: true,
+    interpolate: t => d3.interpolatePurples(Math.pow(t, 0.5)),
+  },
+  marks: [
+    Plot.dot(transpose(djseffd), {x: "received", y: "exerted", fill: "Diff", tip: true, title: "Company", r: 5})
+  ]
+})
+```
+</div>
+
+```{r}
+#| context: server-start
+library(patterncausality)
+pcmatrix <- readRDS("data/djsmatrix.rds")
+effects <- pcEffect(pcmatrix)
+effectsd <- effects$dark
+dfeffd <- effectsd %>% 
+  mutate(Company = rownames(effectsd)) %>% 
+  relocate(Company) 
+```
+
+```{r}
+#| context: server
+effd <- reactive(dfeffd)
+ojs_define(djseffd=effd)
+```
+
+:::
+
+## {auto-animate="true" auto-animate-easing="ease-in-out"}
+
+![](images/logo.png){.absolute left=0 right=0 bottom=0 top=0 height="80%" style="margin: auto auto;"}

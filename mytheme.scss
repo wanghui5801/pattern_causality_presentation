@@ -1,0 +1,82 @@
+/*-- scss:defaults --*/
+
+// fonts
+$font-family-sans-serif: "Palatino Linotype", "Book Antiqua", Palatino,
+  FreeSerif, serif !default;
+
+// colors
+$body-bg: #f0f1eb !default;
+// $body-bg: white !default;
+$body-color: #000 !default;
+$link-color: #51483d !default;
+$selection-bg: #26351c !default;
+$code-block-bg: #ded9ca;
+$code-block-border-color: #000000;
+
+// headings
+$presentation-heading-font: "Palatino Linotype", "Book Antiqua", Palatino,
+  FreeSerif, serif !default;
+$presentation-heading-color: #383d3d !default;
+
+/*-- scss:rules --*/
+
+.reveal a {
+  line-height: 1.3em;
+}
+
+.reveal .title code {
+  color: black;
+}
+
+.reveal h1 code {
+  color: black;
+}
+
+.sectionhead {
+  font-size: 1em;
+  text-align: center;
+  color: $presentation-heading-color;
+  font-family: $presentation-heading-font;
+  background-color: $body-bg;
+  margin: 1px;
+  padding: 2px 2px 2px 2px;
+  width: 120px;
+  border-left: 10px solid;
+}
+
+.reveal .slides section .fragment.semi-fade-out {
+  opacity: 1;
+  visibility: inherit;
+
+  &.visible {
+      opacity: 0.25;
+      visibility: inherit;
+  }
+}
+
+@media print {
+  html:not(.print-pdf) .reveal .slide-menu-button {
+      display: none !important;
+  }
+}
+
+.plot-d6a7b5-ramp {
+  background: transparent !important;
+}
+
+.reveal strong{
+  color: #51483d !important;
+}
+
+// .reveal .slide-logo {
+//   display: block;
+//   position: fixed;
+//   bottom: unset !important;
+//   right: unset !important;
+//   top: 5px;
+//   left: 12px;
+//   height: 100px !important;
+//   width: 100x !important;
+//   max-width: unset !important;
+//   max-height: unset !important;
+// }
