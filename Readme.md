@@ -1,5 +1,7 @@
 # Presentation for pattern causality
 
+![](images/cover.png)
+
 This presentation is based on Observable.js, Echarts.js, D3.js and shiny, before starting to run it, we need to make some preparations.
 
 - Download the [Quarto](https://quarto.org/).
@@ -37,7 +39,7 @@ After=network.target
 # Your user name, usually could be got by $USER
 User=
 # The path of pattern_causality_presentation folder
-WorkingDirectory= 
+WorkingDirectory=
 # The path of quarto + "quarto serve presentation.qmd --host 0.0.0.0 --port xxx" you can define the port here
 ExecStart=
 Restart=always
@@ -70,3 +72,4 @@ quarto serve presentation.qmd
 ```
 
 Relevant information will be presented below.
+
