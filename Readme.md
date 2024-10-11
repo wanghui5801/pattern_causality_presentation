@@ -4,12 +4,12 @@
 
 The related work as below.
 
-> - `patterncausality` package in [CRAN](https://CRAN.R-project.org/package=patterncausality).  
-- `patterncausality` official [Github](https://github.com/skstavroglou/pattern_causality) page.  
-- `patterncausality` package [user guide](https://www.stavroglou.com/pattern_causality/articles/patterncausality.html).  
-- `patterncausality` paper in [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4966221)  
+>   `patterncausality` package in [CRAN](https://CRAN.R-project.org/package=patterncausality).  
+`patterncausality` official [Github](https://github.com/skstavroglou/pattern_causality) page.  
+`patterncausality` package [user guide](https://www.stavroglou.com/pattern_causality/articles/patterncausality.html).  
+`patterncausality` paper in [SSRN](https://papers.ssrn.com/sol3/papers.cfm?abstract_id=4966221)
 
-This presentation is based on Observable.js, Echarts.js, D3.js, Mermaid, tikz, pseudocode and shiny, before starting to run it, we need to make some preparations.
+This presentation is based on `Observable.js`, `Echarts.js`, `D3.js`, `Mermaid`, `tikz`, `pseudocode` and `shiny`, before starting to run it, we need to make some preparations.
 
 - Download the [Quarto](https://quarto.org/).
 - Download the [R](https://www.r-project.org/)
