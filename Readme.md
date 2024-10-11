@@ -19,6 +19,24 @@ This presentation is based on `Observable.js`, `Echarts.js`, `D3.js`, `Mermaid`,
 install.packages(c("shiny", "deSolve", "tidyr", "dplyr", "patterncausality"))
 ```
 
+The possible dependencies are
+
+```shell
+# On debian system
+sudo apt install -y g++ gcc gfortran libreadline-dev libx11-dev libxt-dev \
+            libpng-dev libjpeg-dev libcairo2-dev xvfb \
+            libbz2-dev libzstd-dev liblzma-dev libtiff5 \
+            libssh-dev libgit2-dev libcurl4-openssl-dev \
+            libblas-dev liblapack-dev libopenblas-base \
+            zlib1g-dev openjdk-11-jdk \
+            texinfo texlive texlive-fonts-extra \
+            screen wget libpcre2-dev make cmake \
+            libssl-dev libxml2-dev libfontconfig1-dev libcurl4-openssl-dev \
+            libharfbuzz-dev libfribidi-dev libfreetype6-dev libpng-dev libtiff-dev
+```
+
+If there is anything wrong, you can check the dependencies here, mostly it could be fixed.
+
 ## Start the presentation on Linux server
 
 On Linux, we usually use the `systemctl` daemon to manage the Quarto service.
